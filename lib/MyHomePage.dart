@@ -25,33 +25,54 @@ class Myhomepage extends ConsumerWidget {
           child: Column(
             //mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SingleChildScrollView(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.cloud, color: Colors.blue),
-                    SizedBox(width: 15),
-                    Text("Temp => ", style: TextStyle(fontSize: 20)),
-                    SizedBox(height: 10),
-                    Consumer(
-                      builder: (context, ref, child) {
-                        return data.when(
-                          data:
-                              (value) => Text(
-                                "${value.main?.temp.toString() ?? 0}",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.blue,
-                                ),
-                                // "Temp => $Weathermodel.fromjson(value).main.temp.toString())",
+              Consumer(
+                builder: (context, ref, child) {
+                  return data.when(
+                    data:
+                        (value) => Text(
+                          "${value.name.toString()}",
+                          style: TextStyle(
+                            fontSize: 40,
+                            color: const Color.fromARGB(255, 168, 12, 134),
+                          ),
+                          // "Temp => $Weathermodel.fromjson(value).main.temp.toString())",
+                        ),
+                    error: (e, _) => Text("Error> $e"),
+                    loading: () => CircularProgressIndicator(),
+                  );
+                },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.cloud, color: Colors.blue),
+                  SizedBox(width: 15),
+                  Text("Temp => ", style: TextStyle(fontSize: 20)),
+                  SizedBox(height: 10),
+
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return data.when(
+                        data:
+                            (value) => Text(
+                              "${value.main?.temp.toString() ?? 0}",
+                              style: TextStyle(
+                                fontSize: 25,
+                                color:
+                                    (value.main?.temp ?? 0) < 0
+                                        ? Colors.blue
+                                        : (value.main?.temp ?? 0) > 35
+                                        ? Colors.red
+                                        : Colors.black,
                               ),
-                          error: (e, _) => Text("Error> $e"),
-                          loading: () => CircularProgressIndicator(),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                              // "Temp => $Weathermodel.fromjson(value).main.temp.toString())",
+                            ),
+                        error: (e, _) => Text("Error> $e"),
+                        loading: () => CircularProgressIndicator(),
+                      );
+                    },
+                  ),
+                ],
               ),
               SizedBox(height: 50),
               ElevatedButton(
