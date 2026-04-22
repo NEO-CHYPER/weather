@@ -31,15 +31,18 @@ class Myhomepage extends ConsumerWidget {
                   children: [
                     Icon(Icons.cloud, color: Colors.blue),
                     SizedBox(width: 15),
-                    Text("Live Data Here"),
+                    Text("Temp => ", style: TextStyle(fontSize: 20)),
                     SizedBox(height: 10),
                     Consumer(
                       builder: (context, ref, child) {
                         return data.when(
                           data:
                               (value) => Text(
-                                "Temp => ${value.main?.temp.toString() ?? 0}",
-                                style: TextStyle(fontSize: 40),
+                                "${value.main?.temp.toString() ?? 0}",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.blue,
+                                ),
                                 // "Temp => $Weathermodel.fromjson(value).main.temp.toString())",
                               ),
                           error: (e, _) => Text("Error> $e"),
