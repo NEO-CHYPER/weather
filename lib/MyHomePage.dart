@@ -25,27 +25,30 @@ class Myhomepage extends ConsumerWidget {
           child: Column(
             //mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud, color: Colors.blue),
-                  SizedBox(width: 15),
-                  Text("Live Data Here"),
-                  SizedBox(height: 10),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return data.when(
-                        data:
-                            (value) => Text(
-                              "Temp => ${value.main?.temp.toString() ?? 0}",
-                              // "Temp => $Weathermodel.fromjson(value).main.temp.toString())",
-                            ),
-                        error: (e, _) => Text("Error> $e"),
-                        loading: () => CircularProgressIndicator(),
-                      );
-                    },
-                  ),
-                ],
+              SingleChildScrollView(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.cloud, color: Colors.blue),
+                    SizedBox(width: 15),
+                    Text("Live Data Here"),
+                    SizedBox(height: 10),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return data.when(
+                          data:
+                              (value) => Text(
+                                "Temp => ${value.main?.temp.toString() ?? 0}",
+                                style: TextStyle(fontSize: 40),
+                                // "Temp => $Weathermodel.fromjson(value).main.temp.toString())",
+                              ),
+                          error: (e, _) => Text("Error> $e"),
+                          loading: () => CircularProgressIndicator(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 50),
               ElevatedButton(

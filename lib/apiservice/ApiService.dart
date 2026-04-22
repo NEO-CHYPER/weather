@@ -29,7 +29,7 @@ class Apiservice {
   final dio = Dio();
 
   Future<Weathermodel> getweather() async {
-    Map<String, double> data = await Geolocate().GetLocation();
+    Map<String, double> data = await Geolocate().getLocation();
 
     // 2. Access values using the keys (matching your Map keys)
     double? lat = data['latitude'];
