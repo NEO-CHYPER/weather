@@ -1,4 +1,3 @@
-// this page is for UI
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,87 +8,105 @@ class Myhomepage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(weatherprovider);
+    final weatherAsync = ref.watch(weatherprovider);
+
     return Scaffold(
       backgroundColor: Colors.blueGrey[200],
       appBar: AppBar(
-        title: Text("Weather"),
+        title: const Text("Weather"),
         backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await ref.refresh(weatherprovider.future);
+          ref.refresh(weatherprovider);
         },
         child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Consumer(
-                builder: (context, ref, child) {
-                  return data.when(
-                    data:
-                        (value) => Text(
-                          "${value.name.toString()}",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: const Color.fromARGB(255, 168, 12, 134),
-                          ),
-                          // "Temp => $Weathermodel.fromjson(value).main.temp.toString())",
-                        ),
-                    error: (e, _) => Text("Error> $e"),
-                    loading: () => CircularProgressIndicator(),
-                  );
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud, color: Colors.blue),
-                  SizedBox(width: 15),
-                  Text("Temp => ", style: TextStyle(fontSize: 20)),
-                  SizedBox(height: 10),
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: weatherAsync.when(
+            loading:
+                () => const Padding(
+                  padding: EdgeInsets.only(top: 100),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
 
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return data.when(
-                        data:
-                            (value) => Text(
-                              "${value.main?.temp.toString() ?? 0}",
-                              style: TextStyle(
-                                fontSize: 25,
-                                color:
-                                    (value.main?.temp ?? 0) < 0
-                                        ? Colors.blue
-                                        : (value.main?.temp ?? 0) > 35
-                                        ? Colors.red
-                                        : Colors.black,
-                              ),
-                              // "Temp => $Weathermodel.fromjson(value).main.temp.toString())",
-                            ),
-                        error: (e, _) => Text("Error> $e"),
-                        loading: () => CircularProgressIndicator(),
-                      );
-                    },
+            error:
+                (e, _) => Padding(
+                  padding: const EdgeInsets.only(top: 100),
+                  child: Column(
+                    children: [
+                      Text("Error: $e", textAlign: TextAlign.center),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () => ref.invalidate(weatherprovider),
+                        child: const Text("Retry"),
+                      ),
+                    ],
                   ),
+                ),
+
+            data: (value) {
+              final temp = value.main?.temp ?? 0;
+
+              return Column(
+                children: [
+                  const SizedBox(height: 30),
+
+                  /// 🌆 City Name
+                  Text(
+                    value.name ?? "Unknown",
+                    style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 168, 12, 134),
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  /// 🌡 Temperature Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.cloud, color: Colors.blue, size: 30),
+                      const SizedBox(width: 10),
+
+                      const Text("Temp => ", style: TextStyle(fontSize: 20)),
+
+                      Text(
+                        "$temp °C",
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color:
+                              temp < 0
+                                  ? Colors.blue
+                                  : temp > 35
+                                  ? Colors.red
+                                  : Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 50),
+
+                  /// 🔄 Refresh Button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      ref.invalidate(weatherprovider);
+                    },
+                    child: const Text("Refresh Weather"),
+                  ),
+
+                  const SizedBox(height: 20),
                 ],
-              ),
-              SizedBox(height: 50),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[400],
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () {
-                  ref.invalidate(weatherprovider);
-                  print("Refreshing");
-                },
-                child: Text(
-                  "wather",
-                  style: TextStyle(color: Colors.blue[100]),
-                ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),
