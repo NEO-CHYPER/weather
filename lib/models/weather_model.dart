@@ -46,7 +46,7 @@ class Clouds {
   Clouds({this.all});
 
   factory Clouds.fromjson(Map<String, dynamic> json) {
-    return Clouds(all: json['clouds']);
+    return Clouds(all: json['all']);
   }
 }
 
@@ -80,13 +80,13 @@ class Main {
   //from josn main
   factory Main.fromjson(Map<String, dynamic> json) {
     return Main(
-      temp: json['temp'],
-      feelsLike: json['feelsLike'],
-      tempMin: json['tempMin'],
-      tempMax: json['tempMax'],
-      humidity: json['humidity'],
-      seaLevel: json['seaLevel'],
-      grndLevel: json['grndLevel'],
+      temp: (json['temp'] as num?)?.toDouble(),
+      feelsLike: (json['feelsLike'] as num?)?.toDouble(),
+      tempMin: (json['tempMin'] as num?)?.toDouble(),
+      tempMax: (json['tempMax'] as num?)?.toDouble(),
+      humidity: json['humidity'] as int?,
+      seaLevel: json['seaLevel'] as int?,
+      grndLevel: json['grndLevel'] as int?,
     );
   }
 }
