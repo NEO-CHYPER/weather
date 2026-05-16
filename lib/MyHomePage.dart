@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather/customWidget/wguage.dart';
+import 'dart:math';
 
 import 'providers/providers.dart';
 
@@ -10,20 +13,25 @@ class Myhomepage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weatherAsync = ref.watch(weatherprovider);
+    print("======================= Maths ===========================");
+    print(pi);
+    print(sin(30));
+    print("======================= Maths ===========================");
 
     return Scaffold(
+      backgroundColor: Color.fromRGBO(12, 12, 83, 1),
       appBar: AppBar(
         title: Center(child: Text("Weather")),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/clouds.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     image: AssetImage("assets/clouds.jpg"),
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
         child: RefreshIndicator(
           onRefresh: () async {
             ref.refresh(weatherprovider);
@@ -53,67 +61,49 @@ class Myhomepage extends ConsumerWidget {
                   ),
 
               data: (value) {
-                final temp = value.main?.temp ?? 0;
+                //final temp = value.main?.temp ?? 0;
 
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 30),
-
-                    /// 🌆 City Name
-                    Text(
-                      value.name ?? "Unknown",
-                      style: const TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 168, 12, 134),
-                      ),
-                    ),
-
-                    /// 🌡 Temperature Section
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.cloud, color: Colors.blue, size: 30),
-                        const SizedBox(width: 10),
-
-                        Text(
-                          "$temp °C",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color:
-                                temp < 0
-                                    ? Colors.blue
-                                    : temp > 35
-                                    ? Colors.red
-                                    : Colors.black,
+                    Center(
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(30),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(
+                                sigmaX: 15,
+                                sigmaY: 15,
+                              ), // Frost effect
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.85,
+                                decoration: BoxDecoration(
+                                  // White with very low opacity
+                                  color: Colors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(
+                                      0.2,
+                                    ), // The "edge" of the glass
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: wguage(), // Your custom gauge widget
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Card(
-                      elevation: 5.1,
-                      color:
-                          Colors
-                              .transparent, //Color.fromRGBO(55, 57, 62, 0.35),
-                      surfaceTintColor: Color.fromARGB(199, 104, 104, 229),
-                      child: wguage(),
+                          //-----first card ends--------
+
+                          //---secound card ends--------
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 50),
-
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                      ),
-                      onPressed: () {
-                        ref.invalidate(weatherprovider);
-                      },
-                      child: const Text("Refresh Weather"),
-                    ),
-
-                    const SizedBox(height: 20),
                   ],
                 );
               },

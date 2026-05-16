@@ -1,75 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:weather/providers/providers.dart';
 
-class wguage extends ConsumerStatefulWidget {
+class wguage extends ConsumerWidget {
   const wguage({super.key});
 
   @override
-  ConsumerState<wguage> createState() => _WGaugeState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final weatherAsync = ref.watch(weatherprovider);
 
-class _WGaugeState extends ConsumerState<wguage> {
-  @override
-  Widget build(BuildContext context) {
-    final weather = ref.watch(weatherprovider);
-    final Place1 = weather.value?.name?.toString();
-    final temp = weather.value?.main?.temp?.toDouble() ?? 0.0;
+    return weatherAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Text('Error: $err'),
+      data: (weather) {
+        final temp = weather.main?.temp?.toDouble() ?? 0.0;
+        final cityName = weather.name ?? "Unknown";
 
-    return SfRadialGauge(
-      // title: GaugeTitle(text: "$Place1",textStyle: TextStyle(fontSize: 20, color: Color.fromRGBO(8, 55, 62, 0.4))
-      title: GaugeTitle(
-        text: "$Place1",
-        textStyle: TextStyle(color: Colors.greenAccent, fontSize: 20),
-      ),
-      axes: <RadialAxis>[
-        RadialAxis(
-          minimum: -50,
-          maximum: 50,
-
-          ranges: [
-            GaugeRange(
-              startValue: -50,
-              endValue: 5,
-              color: const Color.fromARGB(255, 108, 96, 235),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // 1. Weather Icon (Matches the cloud/snow in your image)
+            const Icon(
+              Icons.cloud_queue, // Use WeatherIcons package for better icons
+              color: Colors.white,
+              size: 60,
             ),
-            GaugeRange(
-              startValue: 5,
-              endValue: 35,
-              color: const Color.fromARGB(255, 10, 216, 196),
-            ),
-            GaugeRange(
-              startValue: 35,
-              endValue: 50,
-              color: const Color.fromARGB(255, 219, 67, 56),
-            ),
-          ],
+            const SizedBox(height: 10),
 
-          pointers: <GaugePointer>[
-            NeedlePointer(
-              knobStyle: KnobStyle(color: Color.fromRGBO(56, 19, 191, 0.445)),
-              needleColor: const Color.fromARGB(97, 68, 137, 255),
-              value: temp, // ✅ clean usage
+            // 2. Temperature Display
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${temp.toInt()}",
+                  style: const TextStyle(
+                    fontSize: 80,
+                    fontWeight:
+                        FontWeight.w300, // Light font weight for modern look
+                    color: Colors.white,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 15),
+                  child: Text(
+                    "°C",
+                    style: TextStyle(fontSize: 24, color: Colors.white70),
+                  ),
+                ),
+              ],
             ),
-          ],
 
-          annotations: <GaugeAnnotation>[
-            GaugeAnnotation(
-              widget: Text(
-                "${temp.toStringAsFixed(1)} °C",
+            // 3. Location Name (Rotated style like your image)
+            Transform.rotate(
+              angle: -0.1, // Slight tilt like the image
+              child: Text(
+                cityName,
                 style: const TextStyle(
-                  color: Colors.lightBlueAccent,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  letterSpacing: 1.2,
+                  color: Colors.white60,
                 ),
               ),
-              angle: 90,
-              positionFactor: 0.5,
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }
