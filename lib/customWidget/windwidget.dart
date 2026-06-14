@@ -13,8 +13,9 @@ class Windwidget extends ConsumerWidget {
 
     return weatherAsync.when(
       data: (weather) {
-        final maxtemp = weather.main?.tempMax?.toDouble() ?? 0.0;
-        final mintemp = weather.main?.tempMin?.toDouble() ?? 0.0;
+        final currentTemp = weather.main?.temp?.toDouble() ?? 0.0;
+        final minTemp = weather.main?.tempMin?.toDouble() ?? 0.0;
+        final maxTemp = weather.main?.tempMax?.toDouble() ?? 0.0;
 
         return Column(
           children: [
@@ -22,30 +23,59 @@ class Windwidget extends ConsumerWidget {
               children: [
                 Expanded(
                   child: SfRadialGauge(
-                    title: const GaugeTitle(text: 'Current Temp'),
+                    enableLoadingAnimation: true,
+                    backgroundColor: Colors.transparent,
+                    title: const GaugeTitle(
+                      text: 'Current Temp',
+                      textStyle: TextStyle(color: Colors.white),
+                    ),
                     axes: <RadialAxis>[
                       RadialAxis(
                         minimum: 0,
                         maximum: 50,
-                        pointers: <GaugePointer>[NeedlePointer(value: maxtemp)],
+                        interval: 10,
+                        showLabels: true,
+                        showTicks: true,
+                        pointers: <GaugePointer>[
+                          NeedlePointer(value: currentTemp),
+                        ],
                       ),
                     ],
                   ),
                 ),
                 Expanded(
                   child: SfRadialGauge(
-                    title: const GaugeTitle(text: 'Min'),
+                    enableLoadingAnimation: true,
+                    backgroundColor: Colors.transparent,
+                    title: const GaugeTitle(text: 'Max Temp'),
                     axes: <RadialAxis>[
                       RadialAxis(
                         minimum: 0,
                         maximum: 50,
-                        pointers: <GaugePointer>[NeedlePointer(value: mintemp)],
+                        interval: 10,
+                        pointers: <GaugePointer>[NeedlePointer(value: maxTemp)],
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: SfRadialGauge(
+                    enableLoadingAnimation: true,
+                    backgroundColor: Colors.transparent,
+                    title: const GaugeTitle(text: 'Min Temp'),
+                    axes: <RadialAxis>[
+                      RadialAxis(
+                        minimum: 0,
+                        maximum: 50,
+                        interval: 10,
+                        pointers: <GaugePointer>[NeedlePointer(value: minTemp)],
                       ),
                     ],
                   ),
                 ),
               ],
             ),
+            SizedBox(height: 10),
           ],
         );
       },

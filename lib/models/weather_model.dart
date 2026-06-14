@@ -81,12 +81,12 @@ class Main {
   factory Main.fromjson(Map<String, dynamic> json) {
     return Main(
       temp: (json['temp'] as num?)?.toDouble(),
-      feelsLike: (json['feelsLike'] as num?)?.toDouble(),
-      tempMin: (json['tempMin'] as num?)?.toDouble(),
-      tempMax: (json['tempMax'] as num?)?.toDouble(),
+      feelsLike: (json['feels_like'] as num?)?.toDouble(),
+      tempMin: (json['temp_min'] as num?)?.toDouble(),
+      tempMax: (json['temp_max'] as num?)?.toDouble(),
       humidity: json['humidity'] as int?,
-      seaLevel: json['seaLevel'] as int?,
-      grndLevel: json['grndLevel'] as int?,
+      seaLevel: json['sea_level'] as int?,
+      grndLevel: json['grnd_level'] as int?,
     );
   }
 }
