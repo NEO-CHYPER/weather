@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:weather/models/weather_model.dart';
 
 import 'package:weather/providers/providers.dart';
+import 'package:weather_icons_animated/weather_icons_animated.dart';
 
 class Windwidget extends ConsumerWidget {
   const Windwidget({super.key});
@@ -76,6 +78,15 @@ class Windwidget extends ConsumerWidget {
               ],
             ),
             SizedBox(height: 10),
+            Row(
+              children: [
+                Container(
+                  child: Row(
+                    children: [WeatherIcon(icon: Icons.wind_power, size: 30)],
+                  ),
+                ),
+              ],
+            ),
           ],
         );
       },
