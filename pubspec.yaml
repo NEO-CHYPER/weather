@@ -41,6 +41,7 @@ dependencies:
   dio: ^5.9.2
   syncfusion_flutter_gauges: ^33.2.3
   package_info_plus: ^9.0.1
+  weather_icons_animated: ^0.0.2
 
 dev_dependencies:
   flutter_test:
