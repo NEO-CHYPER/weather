@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weather/customWidget/cloudwidget.dart';
 import 'package:weather/customWidget/wguage.dart';
 import 'package:weather/customWidget/windwidget.dart';
 import 'dart:math';
@@ -101,6 +102,7 @@ class Myhomepage extends ConsumerWidget {
                           //-----first card ends--------
                           Windwidget(),
                           //---secound card ends--------
+                          Cloudwidget(),
                         ],
                       ),
                     ),

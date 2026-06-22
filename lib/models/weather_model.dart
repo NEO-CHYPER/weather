@@ -131,4 +131,12 @@ class Wind {
   double? gust;
 
   Wind({this.speed, this.deg, this.gust});
+
+  factory Wind.fromjson(Map<String, dynamic> json) {
+    return Wind(
+      speed: (json['speed'] as num?)?.toDouble(),
+      deg: json['deg'] as int?,
+      gust: (json['gust'] as num?)?.toDouble(),
+    );
+  }
 }

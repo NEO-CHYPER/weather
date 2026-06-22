@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:weather/models/weather_model.dart';
 
 import 'package:weather/providers/providers.dart';
 import 'package:weather_icons_animated/weather_icons_animated.dart';
@@ -18,7 +17,12 @@ class Windwidget extends ConsumerWidget {
         final currentTemp = weather.main?.temp?.toDouble() ?? 0.0;
         final minTemp = weather.main?.tempMin?.toDouble() ?? 0.0;
         final maxTemp = weather.main?.tempMax?.toDouble() ?? 0.0;
+        final windspeed = weather.wind?.speed?.toDouble();
+        final winddegree = weather.wind?.deg?.toInt();
+        final Windgust = weather.wind?.gust?.toDouble();
 
+        print('wind speed ==> ${windspeed ?? 'null'}');
+        //print("wind speed 2 >> $windspeed2");
         return Column(
           children: [
             Row(
@@ -77,13 +81,49 @@ class Windwidget extends ConsumerWidget {
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            WeatherIcon(
+              icon: WeatherIcons.named("wind"),
+              size: 50,
+              style: WeatherIconStyle.line,
+              format: WeatherIconFormat.lottie,
+            ),
+
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  child: Row(
-                    children: [WeatherIcon(icon: Icons.wind_power, size: 30)],
-                  ),
+                Text(
+                  'Speed',
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                ),
+
+                //WeatherIcon(icon: WeatherIcons.named("wind"), size: 50),
+                Text(
+                  'Degree',
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                ),
+                //WeatherIcon(icon: WeatherIcons.named("wind"), size: 50),
+                Text(
+                  'Gust',
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  windspeed.toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                ),
+
+                Text(
+                  winddegree.toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                ),
+
+                Text(
+                  Windgust.toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
               ],
             ),
