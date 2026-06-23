@@ -31,11 +31,12 @@ class Weathermodel {
   //from json here
   factory Weathermodel.fromjson(Map<String, dynamic> json) {
     return Weathermodel(
-      clouds: Clouds.fromjson(json['clouds']),
-      main: Main.fromjson(json['main']),
-      sys: Sys.fromjson(json['sys']),
+      clouds: json['clouds'] != null ? Clouds.fromjson(json['clouds']) : null,
+      main: json['main'] != null ? Main.fromjson(json['main']) : null,
+      sys: json['sys'] != null ? Sys.fromjson(json['sys']) : null,
       name: json['name'],
       visibility: json['visibility'],
+      wind: json['wind'] != null ? Wind.fromjson(json['wind']) : null,
     );
   }
 }

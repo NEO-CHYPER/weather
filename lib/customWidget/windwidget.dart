@@ -19,10 +19,10 @@ class Windwidget extends ConsumerWidget {
         final maxTemp = weather.main?.tempMax?.toDouble() ?? 0.0;
         final windspeed = weather.wind?.speed?.toDouble();
         final winddegree = weather.wind?.deg?.toInt();
-        final Windgust = weather.wind?.gust?.toDouble();
-
-        print('wind speed ==> ${windspeed ?? 'null'}');
-        //print("wind speed 2 >> $windspeed2");
+        final windgust = weather.wind?.gust?.toDouble();
+        debugPrint(
+          'Wind Speed:>>>>>> ${weather.wind?.speed}<<<<',
+        ); //getting null
         return Column(
           children: [
             Row(
@@ -53,7 +53,10 @@ class Windwidget extends ConsumerWidget {
                   child: SfRadialGauge(
                     enableLoadingAnimation: true,
                     backgroundColor: Colors.transparent,
-                    title: const GaugeTitle(text: 'Max Temp'),
+                    title: const GaugeTitle(
+                      text: 'Max Temp',
+                      textStyle: TextStyle(color: Colors.white),
+                    ),
                     axes: <RadialAxis>[
                       RadialAxis(
                         minimum: 0,
@@ -68,7 +71,10 @@ class Windwidget extends ConsumerWidget {
                   child: SfRadialGauge(
                     enableLoadingAnimation: true,
                     backgroundColor: Colors.transparent,
-                    title: const GaugeTitle(text: 'Min Temp'),
+                    title: const GaugeTitle(
+                      text: 'Min Temp',
+                      textStyle: TextStyle(color: Colors.white),
+                    ),
                     axes: <RadialAxis>[
                       RadialAxis(
                         minimum: 0,
@@ -112,17 +118,17 @@ class Windwidget extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  windspeed.toString(),
+                  windspeed.toString() ?? '--',
                   style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
 
                 Text(
-                  winddegree.toString(),
+                  winddegree.toString() ?? '--',
                   style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
 
                 Text(
-                  Windgust.toString(),
+                  windgust.toString() ?? '--',
                   style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
               ],
